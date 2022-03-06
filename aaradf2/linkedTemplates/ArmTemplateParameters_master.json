@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "aaradf2"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabaseA_connectionString": {
+			"value": ""
+		},
+		"DataLakeGen2_connectionString": {
+			"value": ""
+		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://file-examples-com.github.io/uploads/2017/02/file_example_XLSX_5000.xlsx"
+		},
+		"HttpServer2_properties_typeProperties_url": {
+			"value": "https://file-examples-com.github.io/uploads/2017/02/zip_2MB.zip"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
