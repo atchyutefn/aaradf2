@@ -1,0 +1,71 @@
+{
+	"name": "24 split rows",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "24_multiple_rows_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "24_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as string,",
+				"          ename as string,",
+				"          skills as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(skills = split(skills, ',')) ~> derivedColumn1",
+				"derivedColumn1 foldDown(unroll(skills),",
+				"     mapColumn(",
+				"          empid,",
+				"          ename,",
+				"          skills",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          empno as string,",
+				"          ename as string,",
+				"          job as string,",
+				"          mgr as string,",
+				"          hiredate as string,",
+				"          sal as string,",
+				"          comm as string,",
+				"          deptno as string,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     partitionFileNames:['24 singl to multiple rows.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

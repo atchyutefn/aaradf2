@@ -1,0 +1,19 @@
+{
+	"name": "2_dyn_files_copyingtoDestination",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "dynamicfiles",
+				"container": "adfaar"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

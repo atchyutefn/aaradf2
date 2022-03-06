@@ -1,0 +1,35 @@
+{
+	"name": "append Variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Append variable1",
+				"type": "AppendVariable",
+				"dependsOn": [],
+				"userProperties": [
+					{
+						"name": "appendValue",
+						"value": "d"
+					}
+				],
+				"typeProperties": {
+					"variableName": "filename",
+					"value": "\"d\""
+				}
+			}
+		],
+		"variables": {
+			"filename": {
+				"type": "Array",
+				"defaultValue": [
+					"a",
+					"b",
+					"c"
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-03-05T05:45:50Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

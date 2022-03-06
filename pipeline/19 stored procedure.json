@@ -1,0 +1,35 @@
+{
+	"name": "19 stored procedure",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "Declare @empTotal int\nexecute getEmpCount '10',@empTotal output\nselect @empTotal as empTotal",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SQL_database_dataset",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-03-02T11:00:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

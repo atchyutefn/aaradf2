@@ -1,0 +1,20 @@
+{
+	"name": "25_APIFile_toBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "apiFile.xlsx",
+				"folderPath": "input",
+				"container": "adfaar"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
