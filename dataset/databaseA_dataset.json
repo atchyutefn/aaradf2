@@ -1,5 +1,5 @@
 {
-	"name": "SQL_database_dataset",
+	"name": "databaseA_dataset",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabaseA",
@@ -19,13 +19,12 @@
 			},
 			{
 				"name": "edate",
-				"type": "nvarchar"
+				"type": "date"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "aa_good_rows"
+			"table": "aa_error_rows"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
