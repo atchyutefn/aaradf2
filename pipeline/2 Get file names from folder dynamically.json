@@ -52,29 +52,9 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "fileName",
-								"value": {
-									"value": "@item().name",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -85,30 +65,36 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "BinarySource",
+									"type": "DelimitedTextSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true
+										"recursive": true,
+										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
-										"type": "BinaryReadSettings"
+										"type": "DelimitedTextReadSettings"
 									}
 								},
 								"sink": {
-									"type": "BinarySink",
+									"type": "DelimitedTextSink",
 									"storeSettings": {
 										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
 									}
 								},
 								"enableStaging": false
 							},
 							"inputs": [
 								{
-									"referenceName": "Two_2_filenames_dynamically_dest_dataset",
+									"referenceName": "DelimitedText3",
 									"type": "DatasetReference",
 									"parameters": {
 										"filename": {
-											"value": "@variables('fileName')",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
@@ -116,7 +102,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "2_dyn_files_copyingtoDestination",
+									"referenceName": "DelimitedText2",
 									"type": "DatasetReference"
 								}
 							]
