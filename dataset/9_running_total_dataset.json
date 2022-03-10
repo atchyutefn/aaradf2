@@ -1,0 +1,37 @@
+{
+	"name": "9_running_total_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "9 running total.csv",
+				"folderPath": "Real Time Scenario Files/Input",
+				"fileSystem": "container1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "device",
+				"type": "String"
+			},
+			{
+				"name": "total",
+				"type": "String"
+			}
+		]
+	}
+}
