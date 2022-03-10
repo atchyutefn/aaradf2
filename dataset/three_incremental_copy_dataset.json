@@ -1,0 +1,18 @@
+{
+	"name": "three_incremental_copy_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "copyNewModifedFiles",
+				"container": "adfaar"
+			}
+		}
+	}
+}
