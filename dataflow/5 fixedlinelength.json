@@ -24,6 +24,9 @@
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -37,7 +40,15 @@
 				"          ename = substring(column1, 5, 13),",
 				"          state = substring(column1, 18, 2),",
 				"          num = substring(column1, 20, 7)) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"derivedColumn1 select(mapColumn(",
+				"          empid,",
+				"          ename,",
+				"          state,",
+				"          num",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['5 fixedfilelength to normal.csv'],",
 				"     umask: 0022,",
