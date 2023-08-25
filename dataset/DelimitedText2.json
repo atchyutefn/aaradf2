@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "DelimitedText2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_m630",
@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "emp table (1).csv",
 				"container": "container1"
 			},
 			"columnDelimiter": ",",
@@ -20,35 +19,43 @@
 		},
 		"schema": [
 			{
-				"name": "empid",
+				"name": "LatD",
 				"type": "String"
 			},
 			{
-				"name": "ename",
+				"name": " \"LatM\"",
 				"type": "String"
 			},
 			{
-				"name": "job",
+				"name": " \"LatS\"",
 				"type": "String"
 			},
 			{
-				"name": "mgr",
+				"name": " \"NS\"",
 				"type": "String"
 			},
 			{
-				"name": "hiredate",
+				"name": " \"LonD\"",
 				"type": "String"
 			},
 			{
-				"name": "sal",
+				"name": " \"LonM\"",
 				"type": "String"
 			},
 			{
-				"name": "comm",
+				"name": " \"LonS\"",
 				"type": "String"
 			},
 			{
-				"name": "deptno",
+				"name": " \"EW\"",
+				"type": "String"
+			},
+			{
+				"name": " \"City\"",
+				"type": "String"
+			},
+			{
+				"name": " \"State\"",
 				"type": "String"
 			}
 		]

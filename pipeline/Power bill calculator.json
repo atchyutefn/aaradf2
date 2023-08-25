@@ -1,0 +1,106 @@
+{
+	"name": "Power bill calculator",
+	"properties": {
+		"activities": [
+			{
+				"name": "Switch1",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@{pipeline().parameters.slab}",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "1",
+							"activities": [
+								{
+									"name": "Set Bill for Slab 1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Bill",
+										"value": {
+											"value": "@mul(pipeline().parameters.noofUnits,5)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "2",
+							"activities": [
+								{
+									"name": "Set Bill for slab 2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Bill",
+										"value": {
+											"value": "@add(1000,mul(sub(pipeline().parameters.noofUnits,200),7))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "3",
+							"activities": [
+								{
+									"name": "Set Bill for slab 3",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Bill",
+										"value": {
+											"value": "@add(1700,mul(sub(pipeline().parameters.noofUnits,300),9))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"slab": {
+				"type": "int"
+			},
+			"noofUnits": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"Unit Price": {
+				"type": "Integer"
+			},
+			"Bill": {
+				"type": "Integer"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T01:04:22Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
