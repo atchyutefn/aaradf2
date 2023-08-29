@@ -1,0 +1,222 @@
+{
+	"name": "Email start and success",
+	"properties": {
+		"activities": [
+			{
+				"name": "Email notification template creation Start",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[efn].[uspEmailNotification]",
+						"storedProcedureParameters": {
+							"ADFName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							"ErrorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"PipelineName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_start')",
+									"type": "Expression"
+								}
+							},
+							"TriggerTime": {
+								"type": "DateTime",
+								"value": null
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1_emp",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "starting email",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Email notification template creation Start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-21.centralindia.logic.azure.com:443/workflows/a3964b7d79b24191ba5faec39c0fdef1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=O6PPo95EVgilAqBHDxhl9cmu8u-XJaYuTB5GIL0E-CM",
+					"method": "POST",
+					"body": {
+						"value": "@concat(\n        '{\n\t\"subject\":\"',activity('Email notification template creation Start').output.value[0].subject,'\",\n\t\"To\":\"',activity('Email notification template creation Start').output.value[0].receipeints,'\",\n\t\"Body\":\"',activity('Email notification template creation Start').output.value[0].body,'\"\n}'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "starting email",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Email notification template creation Success",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[efn].[uspEmailNotification]",
+						"storedProcedureParameters": {
+							"ADFName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							"ErrorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"PipelineName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_success')",
+									"type": "Expression"
+								}
+							},
+							"TriggerTime": {
+								"type": "DateTime",
+								"value": null
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1_emp",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Success Email",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Email notification template creation Success",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-21.centralindia.logic.azure.com:443/workflows/a3964b7d79b24191ba5faec39c0fdef1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=O6PPo95EVgilAqBHDxhl9cmu8u-XJaYuTB5GIL0E-CM",
+					"method": "POST",
+					"body": {
+						"value": "@concat(\n        '{\n\t\"subject\":\"',activity('Email notification template creation Success').output.value[0].subject,'\",\n\t\"To\":\"',activity('Email notification template creation Success').output.value[0].receipeints,'\",\n\t\"Body\":\"',activity('Email notification template creation Success').output.value[0].body,'\"\n}'\n)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"units": {
+				"type": "Integer",
+				"defaultValue": 250
+			},
+			"slab": {
+				"type": "Integer"
+			},
+			"status_start": {
+				"type": "String",
+				"defaultValue": "START"
+			},
+			"status_success": {
+				"type": "String",
+				"defaultValue": "SUCCESS"
+			},
+			"status_failed": {
+				"type": "String",
+				"defaultValue": "FAILED"
+			}
+		},
+		"annotations": []
+	}
+}
