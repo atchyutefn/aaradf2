@@ -3,22 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
-				"dependsOn": [
-					{
-						"activity": "Start log",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
-			},
-			{
 				"name": "Start log",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -59,7 +43,7 @@
 							"status": {
 								"type": "String",
 								"value": {
-									"value": "@variables('Starting Status')",
+									"value": "@variables('Status_Starting')",
 									"type": "Expression"
 								}
 							}
@@ -73,12 +57,137 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "End Log Success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[uspPipelineExecutionEndLogs]",
+					"storedProcedureParameters": {
+						"errorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"id": {
+							"value": {
+								"value": "@activity('Start log').output.value[0].id",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"status": {
+							"value": {
+								"value": "@variables('Status_Success')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_efndb",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "End Log Failed",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[uspPipelineExecutionEndLogs]",
+					"storedProcedureParameters": {
+						"errorMessage": {
+							"value": {
+								"value": "@activity('Execute Pipeline1').Error.message",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"id": {
+							"value": {
+								"value": "@activity('Start log').output.value[0].id",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"status": {
+							"value": {
+								"value": "@variables('Status_Failed')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_efndb",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Start log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "area calculation",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
-			"Starting Status": {
+			"Status_Starting": {
 				"type": "String",
 				"defaultValue": "Running"
+			},
+			"Status_Success": {
+				"type": "String",
+				"defaultValue": "Success"
+			},
+			"Status_Failed": {
+				"type": "String",
+				"defaultValue": "Failed"
 			}
 		},
 		"annotations": []
