@@ -1,0 +1,285 @@
+{
+	"name": "Logs 630 1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Email starting preparation",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[efn].[uspEmailNotification630]",
+						"storedProcedureParameters": {
+							"errorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"receipients": {
+								"type": "String",
+								"value": {
+									"value": "@variables('receipients')",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('staus_start')",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1_emp",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Starting email notification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Email starting preparation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-23.centralindia.logic.azure.com:443/workflows/e1e3fa789ff94da7aa032f31b1b046e8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZsJszvq83i14t78Gi22R1KfWVe8BvXwpZl7-aZx2nkA",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n\t\"to\":\"',activity('Email starting preparation').output.value[0].receipients,\n\t'\",\n\t\"subject\":\"',activity('Email starting preparation').output.value[0].subject,\n\t'\",\n\t\"body\":\"',activity('Email starting preparation').output.value[0].body,\n\t'\"\n}'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Email ending preparation",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[efn].[uspEmailNotification630]",
+						"storedProcedureParameters": {
+							"errorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"receipients": {
+								"type": "String",
+								"value": {
+									"value": "@variables('receipients')",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_success')",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1_emp",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Ending email notification Success",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Email ending preparation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-23.centralindia.logic.azure.com:443/workflows/e1e3fa789ff94da7aa032f31b1b046e8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZsJszvq83i14t78Gi22R1KfWVe8BvXwpZl7-aZx2nkA",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n\t\"to\":\"',activity('Email ending preparation').output.value[0].receipients,\n\t'\",\n\t\"subject\":\"',activity('Email ending preparation').output.value[0].subject,\n\t'\",\n\t\"body\":\"',activity('Email ending preparation').output.value[0].body,\n\t'\"\n}'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Email ending preparation Failed",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[efn].[uspEmailNotification630]",
+						"storedProcedureParameters": {
+							"errorMessage": {
+								"type": "String",
+								"value": {
+									"value": "@activity('Execute Pipeline1').Error.message",
+									"type": "Expression"
+								}
+							},
+							"receipients": {
+								"type": "String",
+								"value": {
+									"value": "@variables('receipients')",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_failed')",
+									"type": "Expression"
+								}
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1_emp",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Ending email notification Failed",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Email ending preparation Failed",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-23.centralindia.logic.azure.com:443/workflows/e1e3fa789ff94da7aa032f31b1b046e8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZsJszvq83i14t78Gi22R1KfWVe8BvXwpZl7-aZx2nkA",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n\t\"to\":\"',activity('Email ending preparation Failed').output.value[0].receipients,\n\t'\",\n\t\"subject\":\"',activity('Email ending preparation Failed').output.value[0].subject,\n\t'\",\n\t\"body\":\"',activity('Email ending preparation Failed').output.value[0].body,\n\t'\"\n}'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Starting email notification",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "area calculation",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"variables": {
+			"staus_start": {
+				"type": "String",
+				"defaultValue": "Start"
+			},
+			"status_success": {
+				"type": "String",
+				"defaultValue": "Success"
+			},
+			"status_failed": {
+				"type": "String",
+				"defaultValue": "Failed"
+			},
+			"receipients": {
+				"type": "String",
+				"defaultValue": "edufulness@gmail.com"
+			}
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "ds_db_efndb_param",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_efndb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablesname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().tablesname",
+				"type": "Expression"
+			}
+		}
+	}
+}
