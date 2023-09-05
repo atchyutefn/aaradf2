@@ -1,0 +1,24 @@
+{
+	"name": "ds_630_dest_efndb_param",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_efndb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "d630",
+			"table": {
+				"value": "@dataset().tableName",
+				"type": "Expression"
+			}
+		}
+	}
+}
