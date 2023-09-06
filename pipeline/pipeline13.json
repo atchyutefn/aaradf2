@@ -1,0 +1,119 @@
+{
+	"name": "pipeline13",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('TablesInfo')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"preCopyScript": {
+										"value": "@{concat('truncate table ',item().dest_schema,'.',item().dest_tableName)}",
+										"type": "Expression"
+									},
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate",
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_db_efndb_param_830_schemaTablename",
+									"type": "DatasetReference",
+									"parameters": {
+										"schema": {
+											"value": "@item().source_schema",
+											"type": "Expression"
+										},
+										"tableName": {
+											"value": "@item().source_tableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_db_efndb_830_schematable_dest",
+									"type": "DatasetReference",
+									"parameters": {
+										"schema": {
+											"value": "@item().dest_schema",
+											"type": "Expression"
+										},
+										"tableName": {
+											"value": "@item().dest_tableName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"TablesInfo": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"source_schema": "dbo",
+						"source_tableName": "emp",
+						"dest_schema": "stg",
+						"dest_tableName": "employee"
+					},
+					{
+						"source_schema": "efn",
+						"source_tableName": "dept",
+						"dest_schema": "dbo",
+						"dest_tableName": "department"
+					},
+					{
+						"source_schema": "saleslt",
+						"source_tableName": "address",
+						"dest_schema": "dbo",
+						"dest_tableName": "address"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
