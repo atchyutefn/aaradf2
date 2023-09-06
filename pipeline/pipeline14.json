@@ -12,6 +12,7 @@
 						"value": "@variables('TablesInof')",
 						"type": "Expression"
 					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy data1",
@@ -40,6 +41,7 @@
 									"preCopyScript": "@{concat('truncate table ',item().dest_schema,'.',item().dest_tableName)}",
 									"writeBehavior": "insert",
 									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
@@ -102,7 +104,7 @@
 					{
 						"source_schema": "saleslt",
 						"source_tableName": "address",
-						"source_columns": "addressID,CITY,ROWGUID",
+						"source_columns": "AddressID,City,rowguid",
 						"dest_schema": "dbo",
 						"dest_tableName": "address",
 						"dest_columns": "AddressID,City,rowguid"
