@@ -1,0 +1,48 @@
+{
+	"name": "ds_blob630_fullLoad",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_m630",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "full load.csv",
+				"container": "container1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "serial no",
+				"type": "String"
+			},
+			{
+				"name": "source schema",
+				"type": "String"
+			},
+			{
+				"name": "source table",
+				"type": "String"
+			},
+			{
+				"name": "source query",
+				"type": "String"
+			},
+			{
+				"name": "destination schema",
+				"type": "String"
+			},
+			{
+				"name": "destination table",
+				"type": "String"
+			}
+		]
+	}
+}

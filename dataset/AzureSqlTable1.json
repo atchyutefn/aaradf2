@@ -1,0 +1,30 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_efndb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"s": {
+				"type": "string"
+			},
+			"t": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().s",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().t",
+				"type": "Expression"
+			}
+		}
+	}
+}
