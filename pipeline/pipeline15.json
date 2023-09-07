@@ -1,5 +1,5 @@
 {
-	"name": "pipeline14",
+	"name": "pipeline15",
 	"properties": {
 		"activities": [
 			{
@@ -9,10 +9,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('TablesInof')",
+						"value": "@variables('TableInfo')",
 						"type": "Expression"
 					},
-					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy data1",
@@ -29,19 +28,17 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "@concat('select ',item().source_columns,' from ',item().source_schema,'.',item().source_tableName)",
-										"type": "Expression"
-									},
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"preCopyScript": "@{concat('truncate table ',item().dest_schema,'.',item().dest_tableName)}",
+									"preCopyScript": {
+										"value": "@{concat('truncate table ',item().dest_schema,'.',item().dest_tableName)}",
+										"type": "Expression"
+									},
 									"writeBehavior": "insert",
 									"sqlWriterUseTableLock": false,
-									"tableOption": "autoCreate",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
@@ -56,20 +53,30 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "AzureSqlTable1_emp",
-									"type": "DatasetReference"
+									"referenceName": "ds_630_db_efndb_source_param_schemaTable",
+									"type": "DatasetReference",
+									"parameters": {
+										"schemaName": {
+											"value": "@item().source_schema",
+											"type": "Expression"
+										},
+										"tableName": {
+											"value": "@item().source_tableName",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_db_efndb_830_schematable_dest",
+									"referenceName": "ds_630_db_efndb_dest_param_schemaTable",
 									"type": "DatasetReference",
 									"parameters": {
-										"schema": {
+										"SchemaName": {
 											"value": "@item().dest_schema",
 											"type": "Expression"
 										},
-										"tableName": {
+										"TableName": {
 											"value": "@item().dest_tableName",
 											"type": "Expression"
 										}
@@ -79,51 +86,29 @@
 						}
 					]
 				}
-			},
-			{
-				"name": "Copy data2",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"enableStaging": false
-				}
 			}
 		],
 		"variables": {
-			"TablesInof": {
+			"TableInfo": {
 				"type": "Array",
 				"defaultValue": [
 					{
 						"source_schema": "dbo",
 						"source_tableName": "emp",
-						"source_columns": "empno,ename,job,mgr,hiredate,sal,comm,dept",
 						"dest_schema": "stg",
-						"dest_tableName": "employee",
-						"dest_columns": "empno,ename,job,mgr,hiredate,sal,comm,dept"
+						"dest_tableName": "employee"
 					},
 					{
 						"source_schema": "efn",
 						"source_tableName": "dept",
-						"source_columns": "deptno,dname",
 						"dest_schema": "dbo",
-						"dest_tableName": "department",
-						"dest_columns": "deptno,dname"
+						"dest_tableName": "department"
 					},
 					{
 						"source_schema": "saleslt",
 						"source_tableName": "Address",
-						"source_columns": "AddressID,City,rowguid",
 						"dest_schema": "dbo",
-						"dest_tableName": "Address",
-						"dest_columns": "addressid,City,rowguid"
+						"dest_tableName": "Address"
 					}
 				]
 			}
