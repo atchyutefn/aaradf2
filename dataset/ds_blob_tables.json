@@ -1,0 +1,48 @@
+{
+	"name": "ds_blob_tables",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_m630",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "tables info with query.csv",
+				"container": "container1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "source_schema",
+				"type": "String"
+			},
+			{
+				"name": "source_table",
+				"type": "String"
+			},
+			{
+				"name": "source_query",
+				"type": "String"
+			},
+			{
+				"name": "dest_schema",
+				"type": "String"
+			},
+			{
+				"name": "dest_table",
+				"type": "String"
+			}
+		]
+	}
+}
