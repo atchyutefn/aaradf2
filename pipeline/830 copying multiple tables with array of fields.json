@@ -1,0 +1,103 @@
+{
+	"name": "830 copying multiple tables with array of fields",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('TablesInfo')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "@concat('select ',item().source_columns,' from ',item().source_schema,'.',item().source_tableName)",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "AzureSqlTable1_emp",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlTable1",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"TablesInfo": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"source_schema": "dbo",
+						"source_tableName": "emp",
+						"source_columns": "empno,ename,job,mgr,hiredate,sal,comm,dept",
+						"dest_schema": "stg",
+						"dest_tableName": "employee",
+						"dest_columns": "empno,ename,job,mgr,hiredate,sal,comm,dept"
+					},
+					{
+						"source_schema": "efn",
+						"source_tableName": "dept",
+						"source_columns": "deptno,dname,loc",
+						"dest_schema": "dbo",
+						"dest_tableName": "department",
+						"dest_columns": "deptno,dname,loc"
+					},
+					{
+						"source_schema": "saleslt",
+						"source_tableName": "Address",
+						"source_columns": "addressid,City,rowguid",
+						"dest_schema": "dbo",
+						"dest_tableName": "Address",
+						"dest_columns": "addressid,City,rowguid"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
