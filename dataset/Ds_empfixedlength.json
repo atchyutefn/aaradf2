@@ -1,0 +1,28 @@
+{
+	"name": "Ds_empfixedlength",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_m630",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Fixed length.txt",
+				"folderPath": "container1",
+				"container": "container1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			}
+		]
+	}
+}
