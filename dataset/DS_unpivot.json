@@ -1,0 +1,49 @@
+{
+	"name": "DS_unpivot",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_m630",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Pivot.csv",
+				"folderPath": "container1",
+				"container": "container1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "dept",
+				"type": "String"
+			},
+			{
+				"name": "ANALYST",
+				"type": "String"
+			},
+			{
+				"name": "CLERK",
+				"type": "String"
+			},
+			{
+				"name": "MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "PRESIDENT",
+				"type": "String"
+			},
+			{
+				"name": "SALESMAN",
+				"type": "String"
+			}
+		]
+	}
+}
