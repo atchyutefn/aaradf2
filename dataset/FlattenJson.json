@@ -1,0 +1,37 @@
+{
+	"name": "FlattenJson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_m630",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Flatten.json",
+				"folderPath": "container1",
+				"container": "container1"
+			},
+			"encodingName": "UTF-8"
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"sno": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"courses": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}
