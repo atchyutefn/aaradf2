@@ -1,0 +1,17 @@
+{
+	"name": "ls_onpremises_sqlserver_830",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=LAPTOP-ATCHYUTK\\SQLEXPRESS;initial catalog=master",
+			"userName": "azuread\\atchyutkumar",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiODE1OGE1NS0yY2JjLTRjYzUtYmU1NC01MTFjNDM5NjhjZjYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "efn-self-hosted-IR-830",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
